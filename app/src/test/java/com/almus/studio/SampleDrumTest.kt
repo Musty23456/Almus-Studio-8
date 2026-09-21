@@ -7,8 +7,22 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SampleDrumTest {
-    @Test fun sampleNormalizationClampsAndStripsPath() {
-        val s = DrumSample("x", 140, "Kick", "samples\\kick.wav", 0, 140, 30f, 2f, -4, -1).normalized()
+
+    @Test
+    fun sampleNormalizationClampsAndStripsPath() {
+        val s = DrumSample(
+            id = "x",
+            pitch = 140,
+            name = "Kick",
+            fileName = "samples\\kick.wav",
+            velocityMin = 0,
+            velocityMax = 140,
+            gainDb = 30f,
+            pan = 2f,
+            startFrame = -4L,
+            endFrame = -1L
+        ).normalized()
+
         assertEquals(127, s.pitch)
         assertEquals(1, s.velocityMin)
         assertEquals(127, s.velocityMax)
@@ -18,16 +32,49 @@ class SampleDrumTest {
         assertEquals(0L, s.startFrame)
     }
 
-    @Test fun kitKeepsOneMappingPerPitchVelocityRange() {
-        val kit = DrumKit(samples = listOf(
-            DrumSample("a",36,"Kick","a.wav"),
-            DrumSample("b",36,"Kick 2","b.wav"),
-            DrumSample("c",38,"Snare","c.wav")
-        )).normalized()
+    @Test
+    fun kitKeepsOneMappingPerPitchVelocityRange() {
+        val kit = DrumKit(
+            samples = listOf(
+                DrumSample(
+                    id = "a",
+                    pitch = 36,
+                    name = "Kick",
+                    fileName = "a.wav"
+                ),
+                DrumSample(
+                    id = "b",
+                    pitch = 36,
+                    name = "Kick 2",
+                    fileName = "b.wav"
+                ),
+                DrumSample(
+                    id = "c",
+                    pitch = 38,
+                    name = "Snare",
+                    fileName = "c.wav"
+                )
+            )
+        ).normalized()
+
         assertTrue(kit.samples.size <= 2)
     }
-    @Test fun samplerControlsAreClampedAndPersistable() {
-        val s = DrumSample("x", 36, "Kick", "kick.wav", 100, 120, -3f, -0.5f, 10, 1000, 200, 300, true, true, true).normalized()
+
+    @Test
+    fun samplerControlsAreClampedAndPersistable() {
+        val s = DrumSample(
+            id = "x",
+            pitch = 36,
+            name = "Kick",
+            fileName = "kick.wav",
+            startFrame = 10L,
+            endFrame = 1000L,
+            fadeInFrames = 200L,
+            fadeOutFrames = 300L,
+            reverse = true,
+            normalize = true
+        ).normalized()
+
         assertEquals(10L, s.startFrame)
         assertEquals(1000L, s.endFrame)
         assertEquals(200L, s.fadeInFrames)
@@ -35,5 +82,4 @@ class SampleDrumTest {
         assertTrue(s.reverse)
         assertTrue(s.normalize)
     }
-
 }
