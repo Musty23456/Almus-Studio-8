@@ -35,6 +35,7 @@ fun MidiAutomationLane(
     val totalTicks = max(3840L, (events.maxOfOrNull { it.tick } ?: 0L) + 960L)
     val width = max(900f, totalTicks * pixelsPerTick)
     val grid = com.almus.studio.audio.MidiQuantize.gridTicks(subdivision)
+    val primaryColor = MaterialTheme.colorScheme.primary
 
     Column(Modifier.fillMaxWidth()) {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
